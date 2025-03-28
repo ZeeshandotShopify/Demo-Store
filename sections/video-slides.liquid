@@ -1,0 +1,201 @@
+{{ 'video-slides.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="video-slides-section color-{{ section.settings.color_scheme }} gradient{% if section.settings.title == blank %} no-heading{% endif %}">
+  <div
+    class="page-width-container isolate{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+    {% if settings.animations_reveal_on_scroll %}
+      data-cascade
+    {% endif %}
+  >
+    <div class="page-width video-slides-section-inner section-{{ section.id }}-padding">
+      {%- unless section.settings.title == blank -%}
+        <div class="title-wrapper-with-link title-wrapper--self-padded-mobile title-wrapper--no-top-margin section__title">
+          <h2 class="title inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.title }}
+          </h2>
+        </div>
+      {%- endunless -%}
+      <video-slide class="video-slides-wrapper">
+        <div class="swiper-wrapper">
+          {% for block in section.blocks %}
+            <div class="swiper-slide">
+              <div class="swiper-slide-inner-wrapper">
+                <div class="swiper-slide-inner">
+                  <video-slide-play-button>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#0b0909" viewBox="0 0 256 256">
+                      <path d="M240,128a15.74,15.74,0,0,1-7.6,13.51L88.32,229.65a16,16,0,0,1-16.2.3A15.86,15.86,0,0,1,64,216.13V39.87a15.86,15.86,0,0,1,8.12-13.82,16,16,0,0,1,16.2.3L232.4,114.49A15.74,15.74,0,0,1,240,128Z"></path>
+                    </svg>
+                  </video-slide-play-button>
+                  {% if block.settings.video %}
+                    {{
+                      block.settings.video
+                      | video_tag:
+                        image_size: '1100x',
+                        height: '350',
+                        loop: true,
+                        controls: false,
+                        muted: true,
+                        autoplay: false
+                    }}
+                  {% endif %}
+                </div>
+              </div>
+              {% if block.settings.heading != blank %}
+                <h3 class="video-heading h3">{{ block.settings.heading }}</h3>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+        <div class="video-slides-arrows-wrapper">
+          <!-- If we need navigation buttons -->
+          <div class="swiper-button-prev-custom">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#6A643A"
+              stroke-width="1"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-move-left"
+            >
+              <path d="M6 8L2 12L6 16"/><path d="M2 12H22"/>
+            </svg>
+          </div>
+          <div class="swiper-button-next-custom">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#6A643A"
+              stroke-width="1"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-move-right"
+            >
+              <path d="M18 8L22 12L18 16"/><path d="M2 12H22"/>
+            </svg>
+          </div>
+        </div>
+      </video-slide>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Video slides",
+  "class": "section",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "Heading",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.all.heading_size.options__1.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:sections.all.heading_size.options__2.label"
+        },
+        {
+          "value": "h0",
+          "label": "t:sections.all.heading_size.options__3.label"
+        },
+        {
+          "value": "hxl",
+          "label": "t:sections.all.heading_size.options__4.label"
+        },
+        {
+          "value": "hxxl",
+          "label": "t:sections.all.heading_size.options__5.label"
+        }
+      ],
+      "default": "h1",
+      "label": "t:sections.all.heading_size.label"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video",
+      "name": "slide",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video Slides"
+    }
+  ]
+}
+{% endschema %}

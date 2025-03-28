@@ -1,0 +1,99 @@
+.video-slides-section-inner {
+  background-color: #e2d7c6;
+}
+
+.video-slides-section {
+  .title {
+    line-height: 1;
+    width: 100%;
+    text-align: center;
+    font-weight: 700;
+  }
+  .page-width-container {
+    padding-block: 4.5rem;
+    @media (min-width: 750px) {
+      padding-block: 8rem;
+    }
+  }
+}
+video-slide {
+  display: inline-block;
+  overflow: hidden;
+  width: 100%;
+  .swiper-slide {
+    height: auto !important;
+    .video-heading {
+      width: 100%;
+      text-align: center;
+      font-weight: 600;
+    }
+    .swiper-slide-inner-wrapper {
+      background-color: #dddddd;
+      padding-block: 1.5rem;
+      .swiper-slide-inner {
+        width: 100%;
+        height: 100%;
+        --mask: radial-gradient(47.96px at 66.3px 50%, #000 99%, #0000 101%) 0
+            calc(50% - 52px) / 51% 104px repeat-y,
+          radial-gradient(47.96px at -40.3px 50%, #0000 99%, #000 101%) 26px 50% /
+            calc(51% - 26px) 104px repeat-y,
+          radial-gradient(
+              47.96px at calc(100% - 66.3px) 50%,
+              #000 99%,
+              #0000 101%
+            )
+            100% 50%/51% 104px repeat-y,
+          radial-gradient(
+              47.96px at calc(100% + 40.3px) 50%,
+              #0000 99%,
+              #000 101%
+            )
+            calc(100% - 26px) calc(50% - 52px) / calc(51% - 26px) 104px repeat-y;
+        -webkit-mask: var(--mask);
+        mask: var(--mask);
+        position: relative;
+        video-slide-play-button {
+          cursor: pointer;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          z-index: 1;
+          border-radius: 100%;
+          width: 55px;
+          height: 55px;
+          background-color: #dddddd;
+          svg {
+            border-radius: 100%;
+            background-color: #dddddd;
+          }
+        }
+        video {
+          width: 100%;
+          height: 100%;
+          display: block;
+          object-fit: cover;
+          min-height: 380px;
+          max-height: 380px;
+          @media (min-width: 750px) {
+            min-height: 350px;
+            max-height: 350px;
+          }
+        }
+      }
+    }
+  }
+  .video-slides-arrows-wrapper {
+    display: flex;
+    justify-content: center;
+    column-gap: 2rem;
+    margin-top: 3rem;
+    .swiper-button-next-custom,
+    .swiper-button-previous-custom {
+      cursor: pointer;
+    }
+  }
+}

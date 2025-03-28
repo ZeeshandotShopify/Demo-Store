@@ -1,0 +1,530 @@
+{{ 'section-rich-text.css' | asset_url | stylesheet_tag }}
+{{ 'section-columns-with-centered-image.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="isolate{% unless section.settings.full_width %} page-width{% endunless %}">
+  <div class="columns-with-centered-image content-container color-{{ section.settings.color_scheme }} gradient{% if section.settings.full_width %} columns-with-centered-image--full-width content-container--full-width{% endif %} section-{{ section.id }}-padding">
+    <div class="columns-with-centered-image__wrapper columns-with-centered-image__wrapper--{{ section.settings.desktop_content_position }}{% if section.settings.full_width %} page-width{% endif %}">
+      <div class="columns-with-centered-image__blocks {{ section.settings.content_alignment }}">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'heading' -%}
+              <h2
+                class="columns-with-centered-image__heading rte inline-richtext {{ block.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                {{ block.shopify_attributes }}
+                {% if settings.animations_reveal_on_scroll %}
+                  data-cascade
+                  style="--animation-order: {{ forloop.index }};"
+                {% endif %}
+              >
+                {{ block.settings.heading }}
+              </h2>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+      <div class="columns-with-centered-image__blocks text-columns-and-centered-image-wrapper">
+         {% for block in section.blocks %}
+           {% case block.type %}
+           {% when 'text-column-left' %}
+           {% assign column_top_icon = block.settings.icon_t %}
+           {% assign column_top_heading = block.settings.heading_t %}
+           {% assign column_top_text = block.settings.text_t %}
+           <div class="text-columns-blocks-wrapper {{ block.settings.content_alignment }}">
+             {% if column_top_icon != blank or column_top_heading != blank or column_top_text != blank %}
+               <div class="text-column column-top">
+                   {% if column_top_icon != blank %}  <div class="text-column-icon-wrapper">{{ column_top_icon }}</div> {% endif %}
+                   {% if column_top_heading != blank %} <h2 class="text-column-heading">{{ column_top_heading  }}</h2> {% endif %}
+                   {% if column_top_text != blank %} <p class="text-column-text-content">{{ column_top_text }}</p>{% endif %}
+               </div>
+            {% endif %}
+    <!-- Column Bottom  -->
+           {% assign column_top_icon_b = block.settings.icon_b %}
+           {% assign column_top_heading_b = block.settings.heading_b %}
+           {% assign column_top_text_b = block.settings.text_b %}
+             
+           <div class="text-column column-bottom">
+             {% if column_top_icon_b != blank or column_top_heading_b != blank or column_top_text_b != blank %}
+               <div class="text-column column-top">
+                   {% if column_top_icon_b != blank %}  <div class="text-column-icon-wrapper">{{ column_top_icon_b }}</div> {% endif %}
+                   {% if column_top_heading_b != blank %} <h2 class="text-column-heading">{{ column_top_heading_b  }}</h2> {% endif %}
+                   {% if column_top_text_b != blank %} <p class="text-column-text-content">{{ column_top_text_b }}</p>{% endif %}
+               </div>
+            {% endif %}
+           </div>
+           </div>
+            {% when 'centered_image' %}
+             {% if block.settings.image != blank %}
+             <div class="centered-image-wrapper">
+                {{ block.settings.image | image_url: width: block.settings.image.width | image_tag: class: "centered-image" }}
+             </div>
+             {% endif %}
+           {% when 'text-column-right' %}
+           {% assign column_top_icon = block.settings.icon_t %}
+           {% assign column_top_heading = block.settings.heading_t %}
+           {% assign column_top_text = block.settings.text_t %}
+           <div class="text-columns-blocks-wrapper {{ block.settings.content_alignment }}">
+             {% if column_top_icon != blank or column_top_heading != blank or column_top_text != blank %}
+               <div class="text-column column-top">
+                   {% if column_top_icon != blank %}  <div class="text-column-icon-wrapper">{{ column_top_icon }}</div> {% endif %}
+                   {% if column_top_heading != blank %} <h2 class="text-column-heading">{{ column_top_heading  }}</h2> {% endif %}
+                   {% if column_top_text != blank %} <p class="text-column-text-content">{{ column_top_text }}</p>{% endif %}
+               </div>
+            {% endif %}
+    <!-- Column Bottom  -->
+           {% assign column_top_icon_b = block.settings.icon_b %}
+           {% assign column_top_heading_b = block.settings.heading_b %}
+           {% assign column_top_text_b = block.settings.text_b %}
+             
+           <div class="text-column column-bottom">
+             {% if column_top_icon_b != blank or column_top_heading_b != blank or column_top_text_b != blank %}
+               <div class="text-column column-top">
+                   {% if column_top_icon_b != blank %}  <div class="text-column-icon-wrapper">{{ column_top_icon_b }}</div> {% endif %}
+                   {% if column_top_heading_b != blank %} <h2 class="text-column-heading">{{ column_top_heading_b  }}</h2> {% endif %}
+                   {% if column_top_text_b != blank %} <p class="text-column-text-content">{{ column_top_text_b }}</p>{% endif %}
+               </div>
+            {% endif %}
+           </div>
+           </div>
+          {% endcase %}
+         {% endfor %}
+      </div>
+      <div class="columns-with-centered-image__blocks columns-with-centered-image__button-block {{ section.settings.content_alignment }}">
+       {% for block in section.blocks %}
+          {% case block.type %}
+            {%- when 'button' -%}
+              <div
+                class="columns-with-centered-image__buttons{% if block.settings.button_label != blank and block.settings.button_label_2 != blank %} columns-with-centered-image__buttons--multiple{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                {{ block.shopify_attributes }}
+                {% if settings.animations_reveal_on_scroll %}
+                  data-cascade
+                  style="--animation-order: {{ forloop.index }};"
+                {% endif %}
+              >
+                {%- if block.settings.button_label != blank -%}
+                  <a
+                    {% if block.settings.button_link == blank %}
+                      role="link" aria-disabled="true"
+                    {% else %}
+                      href="{{ block.settings.button_link }}"
+                    {% endif %}
+                    class="button{% if block.settings.button_style_secondary %} button--secondary{% else %} button--primary{% endif %}"
+                  >
+                    {{- block.settings.button_label | escape -}}
+                  </a>
+                {%- endif -%}
+                {%- if block.settings.button_label_2 != blank -%}
+                  <a
+                    {% if block.settings.button_link_2 == blank %}
+                      role="link" aria-disabled="true"
+                    {% else %}
+                      href="{{ block.settings.button_link_2 }}"
+                    {% endif %}
+                    class="button{% if block.settings.button_style_secondary_2 %} button--secondary{% else %} button--primary{% endif %}"
+                  >
+                    {{- block.settings.button_label_2 | escape -}}
+                  </a>
+                {%- endif -%}
+              </div>
+            {%- when 'text' -%}
+              <div
+                class="columns-with-centered-image__text rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                {{ block.shopify_attributes }}
+                {% if settings.animations_reveal_on_scroll %}
+                  data-cascade
+                  style="--animation-order: {{ forloop.index }};"
+                {% endif %}
+              >
+<svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M4.5 0.75C4.5 0.34375 4.8125 0 5.25 0H8.75C9.15625 0 9.5 0.34375 9.5 0.75C9.5 1.1875 9.15625 1.5 8.75 1.5H7.75V3.0625C9.09375 3.21875 10.3125 3.78125 11.2812 4.65625L12.2188 3.71875C12.5 3.4375 12.9688 3.4375 13.25 3.71875C13.5625 4.03125 13.5625 4.5 13.25 4.78125L12.2812 5.75C13.0312 6.8125 13.5 8.125 13.5 9.5C13.5 13.0938 10.5625 16 7 16C3.40625 16 0.5 13.0938 0.5 9.5C0.5 6.1875 3 3.4375 6.25 3.0625V1.5H5.25C4.8125 1.5 4.5 1.1875 4.5 0.75ZM7 14.5C8.78125 14.5 10.4062 13.5625 11.3125 12C12.2188 10.4688 12.2188 8.5625 11.3125 7C10.4062 5.46875 8.78125 4.5 7 4.5C5.1875 4.5 3.5625 5.46875 2.65625 7C1.75 8.5625 1.75 10.4688 2.65625 12C3.5625 13.5625 5.1875 14.5 7 14.5ZM7.75 6.75V10C7.75 10.4375 7.40625 10.75 7 10.75C6.5625 10.75 6.25 10.4375 6.25 10V6.75C6.25 6.34375 6.5625 6 7 6C7.40625 6 7.75 6.34375 7.75 6.75Z" fill="#333333"/>
+</svg>
+                {{ block.settings.text }}
+              </div>
+          {% endcase %}
+       {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Columns with centered img",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "desktop_content_position",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.rich-text.settings.desktop_content_position.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.rich-text.settings.desktop_content_position.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.rich-text.settings.desktop_content_position.options__3.label"
+        }
+      ],
+      "default": "center",
+      "label": "t:sections.rich-text.settings.desktop_content_position.label",
+      "info": "t:sections.rich-text.settings.desktop_content_position.info"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.rich-text.settings.content_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.rich-text.settings.content_alignment.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.rich-text.settings.content_alignment.options__3.label"
+        }
+      ],
+      "default": "center",
+      "label": "t:sections.rich-text.settings.content_alignment.label"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "default": true,
+      "label": "t:sections.rich-text.settings.full_width.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "t:sections.rich-text.blocks.heading.name",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Talk about your brand",
+          "label": "t:sections.rich-text.blocks.heading.settings.heading.label"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            {
+              "value": "h2",
+              "label": "t:sections.all.heading_size.options__1.label"
+            },
+            {
+              "value": "h1",
+              "label": "t:sections.all.heading_size.options__2.label"
+            },
+            {
+              "value": "h0",
+              "label": "t:sections.all.heading_size.options__3.label"
+            },
+            {
+              "value": "hxl",
+              "label": "t:sections.all.heading_size.options__4.label"
+            }
+          ],
+          "default": "h1",
+          "label": "t:sections.all.heading_size.label"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "t:sections.rich-text.blocks.buttons.name",
+      "limit": 1,
+      "settings": [
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.rich-text.settings.content_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.rich-text.settings.content_alignment.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.rich-text.settings.content_alignment.options__3.label"
+        }
+      ],
+      "default": "center",
+      "label": "t:sections.rich-text.settings.content_alignment.label"
+    },
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Button label",
+          "label": "t:sections.rich-text.blocks.buttons.settings.button_label_1.label",
+          "info": "t:sections.rich-text.blocks.buttons.settings.button_label_1.info"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "t:sections.rich-text.blocks.buttons.settings.button_link_1.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "button_style_secondary",
+          "default": false,
+          "label": "t:sections.rich-text.blocks.buttons.settings.button_style_secondary_1.label"
+        },
+        {
+          "type": "text",
+          "id": "button_label_2",
+          "label": "t:sections.rich-text.blocks.buttons.settings.button_label_2.label",
+          "info": "t:sections.rich-text.blocks.buttons.settings.button_label_2.info"
+        },
+        {
+          "type": "url",
+          "id": "button_link_2",
+          "label": "t:sections.rich-text.blocks.buttons.settings.button_link_2.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "button_style_secondary_2",
+          "default": false,
+          "label": "t:sections.rich-text.blocks.buttons.settings.button_style_secondary_2.label"
+        }
+      ]
+    },
+    {
+      "type": "text-column-left",
+      "name": "Left side columns",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Column Top"
+        },
+        {
+          "type": "liquid",
+          "id": "icon_t",
+          "label": "Svg icon"
+        },
+        {
+          "type": "text",
+          "id": "heading_t",
+          "label": "Heading"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "text_t",
+          "label": "Inline text"
+        },
+        {
+          "type": "header",
+          "content": "Column Bottom"
+        },
+        {
+          "type": "liquid",
+          "id": "icon_b",
+          "label": "Svg icon"
+        },
+        {
+          "type": "text",
+          "id": "heading_b",
+          "label": "Heading"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "text_b",
+          "label": "Inline text"
+        },
+        {
+          "type": "header",
+          "content": "Alignment settings"
+        },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.rich-text.settings.content_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.rich-text.settings.content_alignment.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.rich-text.settings.content_alignment.options__3.label"
+        }
+      ],
+      "default": "center",
+      "label": "t:sections.rich-text.settings.content_alignment.label"
+    }
+      ]
+    },
+    {
+      "type": "centered_image",
+      "name": "Centered Image",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    },
+    {
+      "type": "text-column-right",
+      "name": "Right side columns",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Column Top"
+        },
+        {
+          "type": "liquid",
+          "id": "icon_t",
+          "label": "Svg icon"
+        },
+        {
+          "type": "text",
+          "id": "heading_t",
+          "label": "Heading"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "text_t",
+          "label": "Inline text"
+        },
+        {
+          "type": "header",
+          "content": "Column Bottom"
+        },
+        {
+          "type": "liquid",
+          "id": "icon_b",
+          "label": "Svg icon"
+        },
+        {
+          "type": "text",
+          "id": "heading_b",
+          "label": "Heading"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "text_b",
+          "label": "Inline text"
+        },
+        {
+          "type": "header",
+          "content": "Alignment settings"
+        },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.rich-text.settings.content_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.rich-text.settings.content_alignment.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.rich-text.settings.content_alignment.options__3.label"
+        }
+      ],
+      "default": "center",
+      "label": "t:sections.rich-text.settings.content_alignment.label"
+    }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "t:sections.rich-text.blocks.text.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "default": "Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.",
+          "label": "t:sections.rich-text.blocks.text.settings.text.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Columns with centered image",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

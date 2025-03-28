@@ -1,0 +1,235 @@
+{{ 'section-rich-text.css' | asset_url | stylesheet_tag }}
+{{ 'section-frequently-asked-questions.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="isolate{% unless section.settings.full_width %} page-width{% endunless %}">
+  <div class="frequently-asked-questions content-container color-{{ section.settings.color_scheme }} gradient{% if section.settings.full_width %} frequently-asked-questions--full-width content-container--full-width{% endif %} section-{{ section.id }}-padding">
+    <div class="frequently-asked-questions__wrapper frequently-asked-questions__wrapper--{{ section.settings.desktop_content_position }}{% if section.settings.full_width %} page-width{% endif %}">
+      <div class="frequently-asked-questions__blocks">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'heading' -%}
+              <h2
+                class="frequently-asked-questions__heading rte inline-richtext {{ block.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                {{ block.shopify_attributes }}
+                {% if settings.animations_reveal_on_scroll %}
+                  data-cascade
+                  style="--animation-order: {{ forloop.index }};"
+                {% endif %}
+              >
+                {{ block.settings.heading }}
+              </h2>
+            {%- when 'text' -%}
+              <div
+                class="frequently-asked-questions__text rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                {{ block.shopify_attributes }}
+                {% if settings.animations_reveal_on_scroll %}
+                  data-cascade
+                  style="--animation-order: {{ forloop.index }};"
+                {% endif %}
+              >
+                {{ block.settings.text }}
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+       <div class="frequently-asked-questions__blocks-and-image-wrapper {% if section.settings.image == blank %}  faq-featured-image-blank {% endif %}">
+           <div class="frequentky-asked-questions-featured-image-wrapper">
+              {% if section.settings.image != blank %}  
+                  {{ section.settings.image | image_url: width: section.settings.image.width | image_tag: class: "frequentky-asked-questions-featured-image" }}
+              {% endif %}
+           </div>
+           <div class="frequentky-asked-questions-wrapper">
+                 {% for block in section.blocks %}  
+                    {% case block.type %}
+                      {% when 'faq' %}
+                          <div class="container">
+                            <div class="question">
+                              <span class="h2">{{ block.settings.question }}</span>
+                              <div class="question-svg">
+                                  <svg width="37" height="38" viewBox="0 0 37 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path fill-rule="evenodd" clip-rule="evenodd" d="M25.0861 13.1396C25.7994 13.1396 26.3777 13.7179 26.3777 14.4313L26.3777 25.3915C26.3777 26.1048 25.7994 26.6831 25.0861 26.6831H14.1259C13.4125 26.6831 12.8342 26.1048 12.8342 25.3915C12.8342 24.6781 13.4125 24.0998 14.1259 24.0998H21.9677L11.3859 13.518C10.8814 13.0135 10.8814 12.1957 11.3859 11.6913C11.8903 11.1868 12.7081 11.1868 13.2126 11.6913L23.7944 22.2731L23.7944 14.4313C23.7944 13.7179 24.3727 13.1396 25.0861 13.1396Z" fill="#181717"/>
+                                  </svg>                                
+                              </div>
+                            </div>
+                            <div class="answercont">
+                              <div class="answer rte">
+                                  <p>{{ block.settings.answer }}</p>
+                              </div>
+                            </div>
+                          </div>   
+                    {% endcase %}
+                 {% endfor %}
+           </div>
+       </div>
+    </div>
+  </div>
+</div>
+<script>
+let question = document.querySelectorAll(".question");
+
+question.forEach(question => {
+  question.addEventListener("click", event => {
+    const active = document.querySelector(".question.active");
+    if(active && active !== question ) {
+      active.classList.toggle("active");
+      active.nextElementSibling.style.maxHeight = 0;
+    }
+    question.classList.toggle("active");
+    const answer = question.nextElementSibling;
+    if(question.classList.contains("active")){
+      answer.style.maxHeight = answer.scrollHeight + "px";
+    } else {
+      answer.style.maxHeight = 0;
+    }
+  })
+})
+
+</script>
+{% schema %}
+{
+  "name": "Frequently asked question",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Featured Image"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "default": true,
+      "label": "t:sections.rich-text.settings.full_width.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "t:sections.rich-text.blocks.heading.name",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Talk about your brand",
+          "label": "t:sections.rich-text.blocks.heading.settings.heading.label"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            {
+              "value": "h2",
+              "label": "t:sections.all.heading_size.options__1.label"
+            },
+            {
+              "value": "h1",
+              "label": "t:sections.all.heading_size.options__2.label"
+            },
+            {
+              "value": "h0",
+              "label": "t:sections.all.heading_size.options__3.label"
+            },
+            {
+              "value": "hxl",
+              "label": "t:sections.all.heading_size.options__4.label"
+            }
+          ],
+          "default": "h1",
+          "label": "t:sections.all.heading_size.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "t:sections.rich-text.blocks.text.name",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>",
+          "label": "t:sections.rich-text.blocks.text.settings.text.label"
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "FAQ",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "question",
+          "label": "Question"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Answer"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Frequently asked question",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

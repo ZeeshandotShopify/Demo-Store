@@ -1,0 +1,30 @@
+<div class="global-image-block">
+  {{ block.settings.image | image_url: width: block.settings.image.width | image_tag  }}
+</div>
+<style>
+  .global-image-block {
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      
+    }
+  }
+</style>
+{% schema %}
+  {
+    "name": "Global Image Block",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Image"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,331 @@
+{{ 'section-rich-text.css' | asset_url | stylesheet_tag }}
+{{ 'section-customers-testimonials.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="isolate{% unless section.settings.full_width %} page-width{% endunless %}">
+  <div class="customers-testimonials content-container color-{{ section.settings.color_scheme }} gradient{% if section.settings.full_width %} customers-testimonials--full-width content-container--full-width{% endif %} section-{{ section.id }}-padding">
+    <div class="customers-testimonials__wrapper customers-testimonials__wrapper--{{ section.settings.desktop_content_position }}{% if section.settings.full_width %} page-width{% endif %}">
+      <div class="customers-testimonials__blocks {{ section.settings.content_alignment }}">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'heading' -%}
+              <h2
+                class="customers-testimonials__heading rte inline-richtext {{ block.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                {{ block.shopify_attributes }}
+                {% if settings.animations_reveal_on_scroll %}
+                  data-cascade
+                  style="--animation-order: {{ forloop.index }};"
+                {% endif %}
+              >
+                {{ block.settings.heading }}
+              </h2>
+            {%- when 'text' -%}
+              <div
+                class="customers-testimonials__text rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                {{ block.shopify_attributes }}
+                {% if settings.animations_reveal_on_scroll %}
+                  data-cascade
+                  style="--animation-order: {{ forloop.index }};"
+                {% endif %}
+              >
+                {{ block.settings.text }}
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+      <customer-testimonials-container class="customer-testimonials-container">
+        <div class="swiper-wrapper">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'testimonial' %}
+                <div class="swiper-slide">
+                  <div class="testimonial-slider-inner">
+                    <!-- stars -->
+                    <div class="stars">
+                      <svg width="161" height="32" viewBox="0 0 161 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14.9782 6.28331C15.4572 4.80921 17.5427 4.80921 18.0216 6.28331L19.7329 11.5502C19.9471 12.2094 20.5615 12.6558 21.2546 12.6558H26.7925C28.3425 12.6558 28.9869 14.6391 27.733 15.5502L23.2527 18.8053C22.6919 19.2127 22.4573 19.9349 22.6715 20.5941L24.3828 25.861C24.8618 27.3351 23.1746 28.5609 21.9207 27.6499L17.4404 24.3948C16.8796 23.9873 16.1202 23.9873 15.5595 24.3948L11.0792 27.6499C9.82526 28.5609 8.13809 27.3351 8.61705 25.861L10.3284 20.5941C10.5426 19.9349 10.3079 19.2127 9.74713 18.8053L5.26686 15.5502C4.01292 14.6391 4.65736 12.6558 6.20731 12.6558H11.7452C12.4384 12.6558 13.0527 12.2094 13.2669 11.5502L14.9782 6.28331Z" fill="#FFA800"/>
+                        <path d="M46.9782 6.28331C47.4572 4.80921 49.5427 4.80921 50.0216 6.28331L51.7329 11.5502C51.9471 12.2094 52.5615 12.6558 53.2546 12.6558H58.7925C60.3425 12.6558 60.9869 14.6391 59.733 15.5502L55.2527 18.8053C54.6919 19.2127 54.4573 19.9349 54.6715 20.5941L56.3828 25.861C56.8618 27.3351 55.1746 28.5609 53.9207 27.6499L49.4404 24.3948C48.8796 23.9873 48.1202 23.9873 47.5595 24.3948L43.0792 27.6499C41.8253 28.5609 40.1381 27.3351 40.6171 25.861L42.3284 20.5941C42.5426 19.9349 42.3079 19.2127 41.7471 18.8053L37.2669 15.5502C36.0129 14.6391 36.6574 12.6558 38.2073 12.6558H43.7452C44.4384 12.6558 45.0527 12.2094 45.2669 11.5502L46.9782 6.28331Z" fill="#FFA800"/>
+                        <path d="M78.9782 6.28331C79.4572 4.80921 81.5427 4.80921 82.0216 6.28331L83.7329 11.5502C83.9471 12.2094 84.5615 12.6558 85.2546 12.6558H90.7925C92.3425 12.6558 92.9869 14.6391 91.733 15.5502L87.2527 18.8053C86.6919 19.2127 86.4573 19.9349 86.6715 20.5941L88.3828 25.861C88.8618 27.3351 87.1746 28.5609 85.9207 27.6499L81.4404 24.3948C80.8796 23.9873 80.1202 23.9873 79.5595 24.3948L75.0792 27.6499C73.8253 28.5609 72.1381 27.3351 72.6171 25.861L74.3284 20.5941C74.5426 19.9349 74.3079 19.2127 73.7471 18.8053L69.2669 15.5502C68.0129 14.6391 68.6574 12.6558 70.2073 12.6558H75.7452C76.4384 12.6558 77.0527 12.2094 77.2669 11.5502L78.9782 6.28331Z" fill="#FFA800"/>
+                        <path d="M110.978 6.28331C111.457 4.80921 113.543 4.80921 114.022 6.28331L115.733 11.5502C115.947 12.2094 116.561 12.6558 117.255 12.6558H122.793C124.342 12.6558 124.987 14.6391 123.733 15.5502L119.253 18.8053C118.692 19.2127 118.457 19.9349 118.671 20.5941L120.383 25.861C120.862 27.3351 119.175 28.5609 117.921 27.6499L113.44 24.3948C112.88 23.9873 112.12 23.9873 111.559 24.3948L107.079 27.6499C105.825 28.5609 104.138 27.3351 104.617 25.861L106.328 20.5941C106.543 19.9349 106.308 19.2127 105.747 18.8053L101.267 15.5502C100.013 14.6391 100.657 12.6558 102.207 12.6558H107.745C108.438 12.6558 109.053 12.2094 109.267 11.5502L110.978 6.28331Z" fill="#FFA800"/>
+                        <path d="M142.978 6.28331C143.457 4.80921 145.543 4.80921 146.022 6.28331L147.733 11.5502C147.947 12.2094 148.561 12.6558 149.255 12.6558H154.793C156.342 12.6558 156.987 14.6391 155.733 15.5502L151.253 18.8053C150.692 19.2127 150.457 19.9349 150.671 20.5941L152.383 25.861C152.862 27.3351 151.175 28.5609 149.921 27.6499L145.44 24.3948C144.88 23.9873 144.12 23.9873 143.559 24.3948L139.079 27.6499C137.825 28.5609 136.138 27.3351 136.617 25.861L138.328 20.5941C138.543 19.9349 138.308 19.2127 137.747 18.8053L133.267 15.5502C132.013 14.6391 132.657 12.6558 134.207 12.6558H139.745C140.438 12.6558 141.053 12.2094 141.267 11.5502L142.978 6.28331Z" fill="#FFA800"/>
+                      </svg>
+                    </div>
+                    {% if block.settings.text != blank %}
+                    <p class="testimonial-slide-text">
+                       {{ block.settings.text }}
+                    </p>
+                    {% endif %}
+                    {% if block.settings.image %}
+                    <div class="testimonial-slide-image">
+                      {{ block.settings.image | image_url: width: block.settings.image.width | image_tag}}
+                    </div>
+                    {% endif %}
+                    {% if block.settings.writter %}
+                       <h3 class="testimonial-slide-writter">{{ block.settings.writter }}</h3>
+                    {% endif %}
+                    {% if block.settings.profession %}
+                       <p class="writter-profession">{{ block.settings.profession }}</p>
+                    {% endif %}
+                  </div>
+                </div>
+            {% endcase %}
+          {% endfor %}
+        </div>
+<div class="arrows-wrapper">
+<div class="swiper-button-prev-custom">
+    <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M27.6486 36.0484C27.18 36.5171 26.4202 36.5171 25.9516 36.0484L18.7516 28.8484C18.2829 28.3798 18.2829 27.62 18.7516 27.1514L25.9516 19.9514C26.4202 19.4827 27.18 19.4827 27.6486 19.9514C28.1173 20.42 28.1173 21.1798 27.6486 21.6484L22.4972 26.7999L36.4001 26.7999C37.0628 26.7999 37.6001 27.3372 37.6001 27.9999C37.6001 28.6626 37.0628 29.1999 36.4001 29.1999L22.4972 29.1999L27.6486 34.3514C28.1173 34.82 28.1173 35.5798 27.6486 36.0484Z" fill="#CED1D8"/>
+    </svg>
+</div>
+<div class="swiper-button-next-custom">
+    <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M28.3514 19.9516C28.82 19.4829 29.5798 19.4829 30.0484 19.9516L37.2484 27.1516C37.7171 27.6202 37.7171 28.38 37.2484 28.8486L30.0484 36.0486C29.5798 36.5173 28.82 36.5173 28.3514 36.0486C27.8827 35.58 27.8827 34.8202 28.3514 34.3516L33.5028 29.2001L19.5999 29.2001C18.9372 29.2001 18.3999 28.6628 18.3999 28.0001C18.3999 27.3374 18.9372 26.8001 19.5999 26.8001H33.5028L28.3514 21.6486C27.8827 21.18 27.8827 20.4202 28.3514 19.9516Z" fill="#CED1D8"/>
+    </svg>
+</div>
+</div>
+      </customer-testimonials-container>
+    </div>
+  </div>
+</div>
+<script>
+class  CustomerTestimonials extends HTMLElement {
+  constructor() {
+    super();
+    this.imageSwiper = null;
+  }
+
+  connectedCallback() {
+  this.imageSwiper  =  this.swiper = new Swiper(this, {
+      spaceBetween: 15,
+      loop: true,
+      navigation: {
+        nextEl: ".swiper-button-next-custom",
+        prevEl: ".swiper-button-prev-custom",
+      },
+      breakpoints: {
+        0: {
+          slidesPerView: 1.15,
+        },
+        650: {
+          slidesPerView: 2,
+        },
+        750: {
+          slidesPerView: 3,
+        },
+        1440: {
+          slidesPerView: 3,
+        },
+      },
+    });
+
+     // Synchronize image swiper with quote swiper via params.control
+      
+      window.imageSwiper = this.imageSwiper;
+      console.log(window.imageSwiper);
+      if (window.quoteSwiper) {
+        this.imageSwiper.params.control = window.quoteSwiper;
+      }
+  }
+}
+
+customElements.define("customer-testimonials-container", CustomerTestimonials);
+</script>
+{% schema %}
+{
+  "name": "Customer testimonilas",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "desktop_content_position",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.rich-text.settings.desktop_content_position.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.rich-text.settings.desktop_content_position.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.rich-text.settings.desktop_content_position.options__3.label"
+        }
+      ],
+      "default": "center",
+      "label": "t:sections.rich-text.settings.desktop_content_position.label",
+      "info": "t:sections.rich-text.settings.desktop_content_position.info"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.rich-text.settings.content_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.rich-text.settings.content_alignment.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.rich-text.settings.content_alignment.options__3.label"
+        }
+      ],
+      "default": "center",
+      "label": "t:sections.rich-text.settings.content_alignment.label"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "default": true,
+      "label": "t:sections.rich-text.settings.full_width.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "t:sections.rich-text.blocks.heading.name",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Talk about your brand",
+          "label": "t:sections.rich-text.blocks.heading.settings.heading.label"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            {
+              "value": "h2",
+              "label": "t:sections.all.heading_size.options__1.label"
+            },
+            {
+              "value": "h1",
+              "label": "t:sections.all.heading_size.options__2.label"
+            },
+            {
+              "value": "h0",
+              "label": "t:sections.all.heading_size.options__3.label"
+            },
+            {
+              "value": "hxl",
+              "label": "t:sections.all.heading_size.options__4.label"
+            }
+          ],
+          "default": "h1",
+          "label": "t:sections.all.heading_size.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "t:sections.rich-text.blocks.text.name",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>",
+          "label": "t:sections.rich-text.blocks.text.settings.text.label"
+        }
+      ]
+    },
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "default": "Text",
+          "label": "Text"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "writter",
+          "label": "writter"
+        },
+        {
+          "type": "text",
+          "id": "writter_profession",
+          "label": "WRitter profession"
+        },
+        {
+          "type": "text",
+          "id": "profession",
+          "label": "Profession"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Customer testimonilas",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

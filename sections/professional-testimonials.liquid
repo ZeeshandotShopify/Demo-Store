@@ -1,0 +1,294 @@
+{{ 'section-rich-text.css' | asset_url | stylesheet_tag }}
+{{ 'section-professional-testimonials.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="isolate{% unless section.settings.full_width %} page-width{% endunless %}">
+  <div class="professional-testimonials content-container color-{{ section.settings.color_scheme }} gradient{% if section.settings.full_width %} professional-testimonials--full-width content-container--full-width{% endif %} section-{{ section.id }}-padding">
+    <div class="professional-testimonials__wrapper professional-testimonials__wrapper--{{ section.settings.desktop_content_position }}{% if section.settings.full_width %} page-width{% endif %}">
+      <div class="professional-testimonials__blocks swipable-blocks">
+           {% render 'professional-testimonial-quotes', section: section %}       
+           {% render 'professional-testimonial-media', section: section %}        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+
+class ProfessionalTestimonialQuotes extends HTMLElement {
+  constructor() {
+    super();
+    this.quoteSwiper = null;
+  }
+
+  connectedCallback() {
+   this.quoteSwiper =  this.swiper = new Swiper(this, {
+      spaceBetween: 15,
+      loop: true,
+      // Navigation arrows
+      navigation: {
+        nextEl: this.querySelector(".swiper-button-next-custom"),
+        prevEl: this.querySelector(".swiper-button-prev-custom"),
+      },
+      breakpoints: {
+        0: {
+          slidesPerView: 1
+        }
+      },
+    });
+
+      // if (window.imageSwiper) {
+      //   this.quoteSwiper.params.control = window.imageSwiper;
+      // }
+  }
+}
+
+customElements.define("professional-testimonial-quotes", ProfessionalTestimonialQuotes);
+  
+class ProfessionalTestimonialMedia extends HTMLElement {
+  constructor() {
+    super();
+    this.imageSwiper = null;
+  }
+
+  connectedCallback() {
+  this.imageSwiper  =  this.swiper = new Swiper(this, {
+      spaceBetween: 15,
+      loop: true,
+      navigation: {
+        nextEl: ".swiper-button-next-custom",
+        prevEl: ".swiper-button-prev-custom",
+      },
+      breakpoints: {
+        0: {
+          slidesPerView: 1.2,
+        },
+        750: {
+          slidesPerView: 1.3,
+        },
+        1440: {
+          slidesPerView: 1.5,
+        },
+      },
+    });
+
+     // Synchronize image swiper with quote swiper via params.control
+      
+      window.imageSwiper = this.imageSwiper;
+      console.log(window.imageSwiper);
+      if (window.quoteSwiper) {
+        this.imageSwiper.params.control = window.quoteSwiper;
+      }
+    
+    this.playVideoOnClick();
+  }
+  playVideoOnClick() {
+    this.querySelectorAll(".swiper-slide-inner video").forEach((video) => {
+      video.addEventListener("click", function () {
+        if (this.paused) {
+          // this.play();
+        } else {
+          this.pause();
+          this.previousElementSibling.style.display = "flex";
+        }
+      });
+    });
+  }
+}
+
+customElements.define("professional-testimonial-media", ProfessionalTestimonialMedia);
+
+  
+class playButton extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.addEventListener("click", () => {
+      this.nextElementSibling.play();
+      this.style.display = "none";
+    });
+  }
+}
+
+customElements.define("video-slide-play-button", playButton);
+</script>
+
+{% schema %}
+{
+  "name": "Professional Testimonials",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "desktop_content_position",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.rich-text.settings.desktop_content_position.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.rich-text.settings.desktop_content_position.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.rich-text.settings.desktop_content_position.options__3.label"
+        }
+      ],
+      "default": "center",
+      "label": "t:sections.rich-text.settings.desktop_content_position.label",
+      "info": "t:sections.rich-text.settings.desktop_content_position.info"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.rich-text.settings.content_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.rich-text.settings.content_alignment.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.rich-text.settings.content_alignment.options__3.label"
+        }
+      ],
+      "default": "center",
+      "label": "t:sections.rich-text.settings.content_alignment.label"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "default": true,
+      "label": "t:sections.rich-text.settings.full_width.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "t:sections.rich-text.blocks.heading.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Talk about your brand",
+          "label": "t:sections.rich-text.blocks.heading.settings.heading.label"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            {
+              "value": "h2",
+              "label": "t:sections.all.heading_size.options__1.label"
+            },
+            {
+              "value": "h1",
+              "label": "t:sections.all.heading_size.options__2.label"
+            },
+            {
+              "value": "h0",
+              "label": "t:sections.all.heading_size.options__3.label"
+            },
+            {
+              "value": "hxl",
+              "label": "t:sections.all.heading_size.options__4.label"
+            }
+          ],
+          "default": "h1",
+          "label": "t:sections.all.heading_size.label"
+        }
+      ]
+    },
+    {
+      "type": "professional-quotes",
+      "name": "Professional Quotes",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "label": "Quote text content"
+        },
+        {
+          "type": "text",
+          "id": "writter",
+          "label": "Writter"
+        },
+        {
+          "type": "header",
+          "content": "Quote Video"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Professional Testimonials",
+      "blocks": [
+        {
+          "type": "heading"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

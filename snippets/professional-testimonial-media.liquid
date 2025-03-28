@@ -1,0 +1,42 @@
+{% comment %} <professional-testimonial-media class="media-carousel"> {% endcomment %}
+<video-slide class="media-carousel">
+  <div class="swiper-wrapper">
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when 'professional-quotes' %}
+          <div class="swiper-slide">
+            <div class="swiper-slide-inner-wrapper">
+              <div class="swiper-slide-inner media--portrait">
+                <video-slide-play-button>
+                  <svg width="107" height="107" viewBox="0 0 107 107" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="106.665" height="106.665" rx="53.3326" fill="url(#paint0_linear_275_476)" fill-opacity="0.4"/>
+                    <path d="M71.9994 53.3322C72.0005 53.7849 71.8845 54.2302 71.6625 54.6248C71.4405 55.0193 71.1203 55.3497 70.7328 55.5838L46.7198 70.2736C46.3149 70.5216 45.8512 70.6569 45.3766 70.6657C44.902 70.6745 44.4336 70.5564 44.0198 70.3236C43.61 70.0945 43.2686 69.7604 43.0308 69.3555C42.7929 68.9507 42.6672 68.4899 42.6665 68.0203V38.6441C42.6672 38.1746 42.7929 37.7137 43.0308 37.3089C43.2686 36.9041 43.61 36.5699 44.0198 36.3408C44.4336 36.108 44.902 35.99 45.3766 35.9987C45.8512 36.0075 46.3149 36.1429 46.7198 36.3908L70.7328 51.0806C71.1203 51.3147 71.4405 51.6451 71.6625 52.0397C71.8845 52.4342 72.0005 52.8795 71.9994 53.3322Z" fill="white"/>
+                    <defs>
+                    <linearGradient id="paint0_linear_275_476" x1="0" y1="0" x2="127.898" y2="64.6756" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#D0D8E0"/>
+                    <stop offset="0.274157" stop-color="white"/>
+                    <stop offset="1" stop-color="#D0D8E0"/>
+                    </linearGradient>
+                    </defs>
+                  </svg>
+                </video-slide-play-button>
+                {% if block.settings.video %}
+                  {{
+                    block.settings.video
+                    | video_tag:
+                      image_size: '1100x',
+                      height: '350',
+                      loop: true,
+                      controls: false,
+                      muted: true,
+                      autoplay: false
+                  }}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+      {% endcase %}
+    {% endfor %}
+  </div>
+</video-slide>                    
+<!-- </professional-testimonial-media> -->

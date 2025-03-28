@@ -1,0 +1,68 @@
+<div class="professional-testimonial-quotes-and-title-wrapper">
+  <div class="professional-testimonials__blocks {{ section.settings.content_alignment }}">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'heading' -%}
+          <h2
+            class="professional-testimonials__heading rte inline-richtext {{ block.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            {{ block.shopify_attributes }}
+            {% if settings.animations_reveal_on_scroll %}
+              data-cascade
+              style="--animation-order: {{ forloop.index }};"
+            {% endif %}
+          >
+            {{ block.settings.heading }}
+          </h2>
+        {%- when 'text' -%}
+          <div
+            class="professional-testimonials__text rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            {{ block.shopify_attributes }}
+            {% if settings.animations_reveal_on_scroll %}
+              data-cascade
+              style="--animation-order: {{ forloop.index }};"
+            {% endif %}
+          >
+            {{ block.settings.text }}
+          </div>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+  <professional-testimonial-quotes class="quote-carousel">
+    <div class="swiper-wrapper">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'professional-quotes' %}
+            <div class="swiper-slide">
+              <div class="quotes-text-wrapper">
+                {% if block.settings.text != blank %}
+                  <div class="quotes-text h2 small-hide">
+                    {{ block.settings.text }}
+                  </div>
+                  <div class="quotes-text h3 medium-hide large-up-hide">
+                    {{ block.settings.text }}
+                  </div>
+                {% endif %}
+                {% if block.settings.writter != blank %}
+                  <p class="quotes-writter h3">
+                    {{ block.settings.writter }}
+                  </p>
+                {% endif %}
+              </div>
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+    <div class="arrows-wrapper">
+      <div class="swiper-button-prev-custom">
+        <svg width="33" height="21" viewBox="0 0 33 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2.42636 13.8232C1.40059 12.9634 0.876493 11.7375 0.854072 10.5037C0.852366 10.4759 0.8515 10.4479 0.8515 10.4197C0.851501 10.3912 0.852388 10.3628 0.854138 10.3347C0.877499 9.10197 1.40162 7.87759 2.42651 7.0186L10.327 0.396981C10.8979 -0.0814844 11.7485 -0.00657275 12.227 0.564299C12.7055 1.13517 12.6305 1.98583 12.0597 2.46429L4.17695 9.07102L30.9724 9.07102C31.7173 9.07102 32.3211 9.67485 32.3211 10.4197C32.3211 11.1646 31.7173 11.7684 30.9724 11.7684L4.17399 11.7684L12.0598 18.3797C12.6306 18.8583 12.7054 19.7089 12.2269 20.2797C11.7483 20.8505 10.8976 20.9253 10.3268 20.4468L2.42636 13.8232Z" fill="white"/>
+        </svg>
+      </div>
+      <div class="swiper-button-next-custom">
+        <svg width="33" height="21" viewBox="0 0 33 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M30.5736 13.8231C31.5994 12.9633 32.1235 11.7375 32.1459 10.5036C32.1476 10.4759 32.1485 10.4479 32.1485 10.4197C32.1485 10.3911 32.1476 10.3627 32.1459 10.3346C32.1225 9.10191 31.5984 7.87753 30.5735 7.01854L22.673 0.39692C22.1021 -0.0815455 21.2515 -0.00663379 20.773 0.564238C20.2945 1.13511 20.3695 1.98577 20.9403 2.46423L28.823 9.07096L2.0276 9.07096C1.28274 9.07096 0.678908 9.67479 0.67891 10.4197C0.67891 11.1645 1.28274 11.7684 2.02761 11.7684L28.826 11.7684L20.9402 18.3797C20.3694 18.8582 20.2946 19.7089 20.7731 20.2797C21.2517 20.8505 22.1024 20.9253 22.6732 20.4467L30.5736 13.8231Z" fill="white"/>
+        </svg>
+      </div>
+    </div>
+  </professional-testimonial-quotes>
+</div>

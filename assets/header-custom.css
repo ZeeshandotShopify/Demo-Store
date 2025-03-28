@@ -1,0 +1,16 @@
+.header-custom.page-width {
+  max-width: unset;
+}
+
+.header-custom {
+  .header__inline-menu {
+    text-align: center;
+  }
+}
+.header-custom {
+  position: absolute;
+  width: 100%;
+}
+.header-custom .header__menu-item ,.header-custom .header__icon{
+    color: #ffff;
+}

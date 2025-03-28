@@ -1,0 +1,22 @@
+<div class="custom-section page-width">
+  {% content_for 'blocks' %}
+</div>
+
+{% schema %}
+{
+  "name": "New Custom section",
+  "settings": [
+
+  ],
+  "blocks": [
+    { 
+      "type": "@theme" 
+    }
+  ],
+  "presets": [
+    {
+      "name": "New Custom section"
+    }
+  ]
+}
+{% endschema %}

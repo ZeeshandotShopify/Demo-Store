@@ -1,0 +1,47 @@
+{% stylesheet %}
+  .text-left {
+    text-align: left;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .text-right {
+    text-align: right;
+  }
+{% endstylesheet %}
+
+<div class="text-block text-{{ block.settings.alignment }}">
+  {{ block.settings.text }}
+  {{ block.settings.meta_info }}
+  <br>
+  {{ block.settings.meta_info.name }}
+</div>
+
+{% schema %}
+{
+  "name": "Global Text Block",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "text_alignment",
+      "id": "alignment",
+      "label": "Alignment"
+    },
+    {
+      "type": "metaobject",
+      "id": "meta_info",
+      "label": "Meta Information",
+      "metaobject_type": "farmers"
+    }
+  ],
+  "presets": [
+    { "name": "Global Text Block" }
+  ]
+}
+{% endschema %}
